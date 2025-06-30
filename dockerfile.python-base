@@ -8,7 +8,7 @@ FROM python:3.12
 
 ## Use Debian unstable
 RUN echo "deb http://http.debian.net/debian sid main" > /etc/apt/sources.list.d/debian-unstable.list \
-        && echo 'APT::Default-Release "testing";' > /etc/apt/apt.conf.d/default \
+#        && echo 'APT::Default-Release "testing";' > /etc/apt/apt.conf.d/default \
         && echo 'APT::Install-Recommends "false";' > /etc/apt/apt.conf.d/90local-no-recommends
 
 RUN apt-get update \
@@ -21,7 +21,7 @@ RUN apt-get update \
 		r-base-dev \
                 r-base-core \
 		r-recommended \
-		libgit2-dev libssl-dev libcurl4-gnutls-dev \
+		libgit2-dev libssl-dev libcurl4-gnutls-dev pandoc nano\
 	&& chown root:staff "/usr/local/lib/R/site-library" \
 	&& chmod g+ws "/usr/local/lib/R/site-library" \
 	&& ln -s /usr/lib/R/site-library/littler/examples/install.r /usr/local/bin/install.r \
@@ -34,6 +34,7 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN Rscript -e 'install.packages("mlflow")'
+RUN Rscript -e 'install.packages("renv")'
 RUN pip install mlflow dvc dvc-s3
 
 CMD ["bash"]
